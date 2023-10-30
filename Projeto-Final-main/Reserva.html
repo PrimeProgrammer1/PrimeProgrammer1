@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Reserva</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="multiweb.css" />
+    <script src="multi.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+  <div class="container-fluid">
+    <div class="row bg-dark">
+            <hr>
+            <div class="col-8">
+            <h1 class="text-start display-5 text-light ">
+              Restaurante Mouse Malboro
+          </div>
+              <div class="col-1 p-0 me-5">
+              <a href="/header.html" >
+                <button class="btn btn-success">Voltar ao Menu</button>
+            </a>
+          </div>
+            <div class="col-1 p-0 ms-2">
+            <a href="/Form.html" >
+                <button class="btn btn-success">Cadastro</button>
+            </a>
+          </div>
+            <div class="col-1 p-0 m-0">   
+            <a href="/Sugest.html" >
+                <button class="btn btn-success">Sugestões</button>
+            </a>
+          </div>
+     </div>        
+              <style>
+                .dropbtn {
+                  background-color: #04AA6D;
+                  color: white;
+                  padding: 16px;
+                  font-size: 16px;
+                  border: none;
+                  cursor: pointer;
+                }
+        
+                .dropbtn:hover,
+                .dropbtn:focus {
+                  background-color: #3e8e41;
+                }
+        
+                #myInput {
+                  box-sizing: border-box;
+                  background-image: url('searchicon.png');
+                  background-position: 14px 12px;
+                  background-repeat: no-repeat;
+                  font-size: 12px;
+                  padding: 14px 20px 12px 35px;
+                  border: none;
+                  border-bottom: 1px solid #ddd;
+                }
+        
+                #myInput:focus {
+                  outline: 3px solid #ddd;
+                }
+        
+                .dropdown {
+                  position: relative;
+                  display: inline-block;
+                }
+        
+                .dropdown-content {
+                  display: none;
+                  position: absolute;
+                  background-color: #f6f6f6;
+                  min-width: 230px;
+                  overflow: auto;
+                  border: 1px solid #ddd;
+                  z-index: 1;
+                }
+        
+                .dropdown-content a {
+                  color: black;
+                  padding: 12px 20px;
+                  text-decoration: none;
+                  display: block;
+                }
+        
+                .dropdown a:hover {
+                  background-color: #ddd;
+                }
+        
+                .show {
+                  display: block;
+                }
+                table {
+                  border-collapse: collapse;
+                }
+
+                td {
+                  padding: 10px;
+                  border: 1px solid #ccc;
+                }
+
+                td:hover {
+                  background-color: lightgray;
+                  cursor: pointer;
+                }
+              </style>
+
+    <hr>
+
+    <h2 class="bg-dark text-light display-5">Reserva</h2>
+
+    <hr>
+
+    <table id="calendar">
+      <thead>
+        <tr>
+          <th colspan="7" id="month-year"></th>
+        </tr>
+        <tr>
+          <th>Domingo</th>
+          <th>Segunda</th>
+          <th>Terça</th>
+          <th>Quarta</th>
+          <th>Quinta</th>
+          <th>Sexta</th>
+          <th>Sábado</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  
+    <form>
+      <br>
+      <button type="submit" onclick="reservarCalendario()" class="btn btn-success">Reservar</button>
+   </form>
+
+    <script>
+
+      function createCalendar(year, month) {
+        var tableBody = document.querySelector("#calendar tbody");
+        var monthYearHeader = document.querySelector("#month-year");
+        tableBody.innerHTML = "";
+        
+        var firstDay = new Date(year, month, 1);
+        
+        var lastDay = new Date(year, month + 1, 0).getDate();
+        
+        var startDayIndex = firstDay.getDay();
+        
+        monthYearHeader.innerHTML = new Intl.DateTimeFormat('pt-BR', { year: 'numeric', month: 'long' }).format(firstDay);
+        
+        var weekRow = document.createElement("tr");
+        tableBody.appendChild(weekRow);
+  
+        for (var i = 0; i < startDayIndex; i++) {
+          var cell = document.createElement("td");
+          weekRow.appendChild(cell);
+        }
+        
+        var currentDay = 1;
+        for (var i = startDayIndex; i < 7; i++) {
+          var cell = document.createElement("td");
+          cell.innerHTML = currentDay;
+          cell.addEventListener("click", function() {
+
+            selectDay(this);
+          });
+          weekRow.appendChild(cell);
+          currentDay++;
+        }
+        
+        while (currentDay <= lastDay) {
+          var weekRow = document.createElement("tr");
+          tableBody.appendChild(weekRow);
+          
+          for (var i = 0; i < 7; i++) {
+            if (currentDay > lastDay) {
+              break;
+            }
+            
+            var cell = document.createElement("td");
+            cell.innerHTML = currentDay;
+            cell.addEventListener("click", function() {
+
+              selectDay(this);
+            });
+            weekRow.appendChild(cell);
+            currentDay++;
+          }
+        }
+      }
+      
+      function selectDay(cell) {
+
+        var selectedDay = document.querySelector(".selected");
+        if (selectedDay) {
+          selectedDay.classList.remove("selected");
+        }
+        
+        cell.classList.add("selected");
+        
+        console.log(cell.innerHTML);
+      }
+      
+      var currentDate = new Date();
+      var currentYear = currentDate.getFullYear();
+      var currentMonth = currentDate.getMonth();
+      
+      createCalendar(currentYear, currentMonth);
+
+      function reservarCalendario(){
+          alert("Reserva efetuada com sucesso!")
+      }
+    </script>
+  </div>
+</body>
+
+</html>
